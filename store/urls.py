@@ -8,8 +8,6 @@ urlpatterns = [
     path('', views.all_prods ),
     # path('add-to-card/',views.add_to_cart),
     # path('google-login/', views.GoogleConnect.as_view())
-   
-   
 ]    
 
 

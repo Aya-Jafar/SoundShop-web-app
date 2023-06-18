@@ -1,61 +1,63 @@
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Link} from 'react-router-dom'
-// import {getProducts} from './components/HomePage'
+import { Link } from 'react-router-dom';
 
 export default function Card() {
-    // let products = getProducts();
+
+return (
+        <div className="row">
+        <div className="col-lg-12">
+            <div className="box-element">
+            <Link className="btn btn-outline-dark" to="/">&#x2190; Continue Shopping</Link>
+
+            <br />
+            <br />
+            <table className="table">
+                <tr>
+                <th><h5>Items: <strong>{}</strong></h5></th>
+                <th><h5>Total: <strong>${}</strong></h5></th>
+                <th className="checkout-button">
+                    <Link to="/checkout" className="btn btn-primary">Checkout</Link>
+                </th>
 
 
+                </tr>
+            </table>
 
-
-    return (
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="box-element">
-
-                    <Link class="btn btn-outline-dark" to="/">&#x2190; Continue Shopping</Link>
-
-                    <br />
-                    <br />
-                    <table class="table">
-                        <tr>
-                            <th><h5>Items: <strong>{ }</strong></h5></th>
-                            <th><h5>Total:<strong> ${ }</strong></h5></th>
-                            <th>
-                                <a style={{float:'right', margin:'5px'}} class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
-                            </th>
-                        </tr>
-                    </table>
-
-
-                    <br />
-                    <div class="box-element">
-                        <div class="cart-row">
-                            <div style={{ flex: "2" }}></div>
-                            <div style={{ flex: "2" }}><strong>Item</strong></div>
-                            <div style={{ flex: "1" }}><strong>Price</strong></div>
-                            <div style={{ flex: "1" }}><strong>Quantity</strong></div>
-                            <div style={{ flex: "1" }}><strong>Total</strong></div>
-                        </div>
-                        <div class="cart-row">
-                            <div style={{ flex: "2" }}><img class="row-image" src="" /></div>
-                            <div style={{ flex: "2" }}><p>{ }</p></div>
-                            <div style={{ flex: "1" }}><p>${ }</p></div>
-                            <div style={{ flex: "1" }}>
-                                <p class="quantity">{ }</p>
-                                <div class="quantity">
-                                    <img data-action="add" class="chg-quantity update-cart" src="'images/arrow-up.png'" alt="img"/>
-
-                                    <img data-action="remove" class="chg-quantity update-cart" src="'images/arrow-down.png'" alt="img"/>
-                                </div>
-                            </div>
-                            <div style={{ flex: "1" }}><p>${ }</p></div>
-                        </div>
+            <br />
+            <div className="box-element">
+                <div className="cart-row">
+                <div className="flex-column" style={{ flex: "2" }}></div>
+                <div className="flex-column" style={{ flex: "2" }}><strong>Item</strong></div>
+                <div className="flex-column" style={{ flex: "1" }}><strong>Price</strong></div>
+                <div className="flex-column" style={{ flex: "1" }}><strong>Quantity</strong></div>
+                <div className="flex-column" style={{ flex: "1" }}><strong>Total</strong></div>
+                </div>
+                <div className="cart-row">
+                <div className="flex-column" style={{ flex: "2" }}>
+                    <img className="row-image" src="" alt="item" />
+                </div>
+                <div className="flex-column" style={{ flex: "2" }}>
+                    <p>{}</p>
+                </div>
+                <div className="flex-column" style={{ flex: "1" }}>
+                    <p>${}</p>
+                </div>
+                <div className="flex-column" style={{ flex: "1" }}>
+                    <p className="quantity">{}</p>
+                    <div className="quantity">
+                    <img data-action="add" className="chg-quantity update-cart" src="'images/arrow-up.png'" alt="increase" />
+                    <img data-action="remove" className="chg-quantity update-cart" src="'images/arrow-down.png'" alt="decrease" />
                     </div>
                 </div>
+                <div className="flex-column" style={{ flex: "1" }}>
+                    <p>${}</p>
+                </div>
+                </div>
             </div>
+            </div>
+        </div>
         </div>
     );
 }
+
+

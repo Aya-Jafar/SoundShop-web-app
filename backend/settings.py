@@ -42,24 +42,16 @@ INSTALLED_APPS = [
     'store',
     'rest_framework',
     "corsheaders",
+    'auth',
 
     
-    'rest_auth',
+    # 'rest_auth',
 
-
-    # 'rest_framework.authtoken',
-    # 'rest_auth.registration',
-    # 'django.contrib.sites',
     'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
-    # 'dj_rest_auth',
-    # 'oauth2_provider',
-    # 'social_django',
-    # 'drf_social_oauth2',
 
 ]
+
+
 
 
 MIDDLEWARE = [
@@ -75,9 +67,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # replace with the domain of your React app
+    'http://localhost:3002',  # replace with the domain of your React app
 ]
 
 
@@ -124,8 +117,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+
             ],
         },
     },
@@ -141,10 +133,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'store_DB',
-        'USER': 'ayajafar',
-        'PASSWORD': '1q2w3e4r5t',
-        'HOST': 'localhost',
+        'NAME': 'django-project-db',
+        'USER': 'Aya',
+        'PASSWORD': 'sarosha123',
+        'HOST': '127.0.0.1',
+
         'PORT': '3306',
     }
 }

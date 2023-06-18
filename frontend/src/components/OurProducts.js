@@ -18,6 +18,6 @@ function JumpScrollButton() {
 export default function OurProducts(){
 
     return (
-        <JumpScrollButton/>
+        <JumpScrollButton />
     );
 }
