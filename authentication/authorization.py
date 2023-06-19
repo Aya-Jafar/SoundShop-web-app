@@ -5,6 +5,7 @@ import datetime
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
 
 
@@ -16,7 +17,7 @@ class JWTAuthentication(BaseAuthentication):
 
         user = self.authenticate_credentials(token)
         return user, token
-
+    
     def get_token_from_request(self, request):
         # Extract the token from the request headers, query parameters, or cookies
         # Adjust this logic based on how you expect to receive the JWT token
@@ -51,3 +52,4 @@ def create_token_for_user(user):
         settings.SECRET_KEY, algorithm='HS256'
     )
     return {'access': token}
+
