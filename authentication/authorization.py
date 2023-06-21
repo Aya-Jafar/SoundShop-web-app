@@ -28,7 +28,7 @@ class JWTAuthentication(BaseAuthentication):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms='HS256')
         except JWTError:
-            raise AuthenticationFailed('Invalid token')
+            return None
 
         user_id = payload.get('pk')
         if user_id:

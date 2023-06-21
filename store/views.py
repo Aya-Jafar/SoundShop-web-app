@@ -8,12 +8,15 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions
 
 from authentication.authorization import JWTAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from jwt import decode
+from .services import get_current_user , check_expire_date
 
 
 User = get_user_model()
@@ -31,39 +34,44 @@ def all_prods(request):
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
+@authentication_classes([JSONWebTokenAuthentication])
 def get_order(request):
-    # TODO: check if user is authenticated
+    try:
+        # TODO: Check expire date 
 
-    print(request.user)
+        # Get the token from the request headers
+        current_customer = get_current_user(request)
 
-    # get current  customer
-    customer = User.objects.get(id=request.user.id)
+        # Get the current customer's order
+        order, created = Order.objects.get_or_create(
+            customer=current_customer, completed=False)
 
-    # get current customer order
-    order, created = Order.objects.get_or_create(
-        customer=customer, completed=False)
+        serializer = CardSerializers(order)
 
-    serializer = CardSerializers(order)
-    return Response(serializer.data)
+        return Response(serializer.data)
+    
+    except Exception as e:
+        return Response({'error': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 @api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
 def get_items(request):
-    # TODO: check if user is authenticated
+    try:
+        # get current  customer
+        customer = get_current_user(request)
+        # get current customer order
+        order, created = Order.objects.get_or_create(
+            customer=customer, completed=False)
 
-    # get current  customer
-    customer = User.objects.get(id=1)
-    # get current customer order
-    order, created = Order.objects.get_or_create(
-        customer=customer, completed=False)
+        items = order.items.all()
 
-    items = order.items.all()
-
-    serializer = ItemSerializers(items, many=True)
-    return Response(serializer.data)
-
+        serializer = ItemSerializers(items, many=True)
+        return Response(serializer.data)
+    
+    except:
+        return Response({'error': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])
@@ -73,7 +81,7 @@ def add_to_card(request):
     # get current  customer
     customer = User.objects.get(id=1)
     try:
-        order = Order.objects.get(customer=customer)
+        order = Order.objects.get(customer=customer, completed=False)
         if not order.completed:
             item = OrderItem.objects.create(
                 order=order, product=request.POST.get('product'), qnt=1)

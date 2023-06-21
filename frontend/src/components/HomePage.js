@@ -12,7 +12,7 @@ const textStyle = {
   backgroundColor: "#fff",
   boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.332)",
   borderRadius: "7px",
-  padding:"50px"
+  padding:"40px"
 };
 
 

@@ -13,7 +13,7 @@ class ProdSerializers(ModelSerializer):
 class CardSerializers(ModelSerializer):
     class Meta:
         model = Order
-        fields=['date_ordered','total_qnt' , 'total_price','count_order_items','completed']
+        fields=['total_qnt' , 'total_price','count_order_items','completed']
 
 
 

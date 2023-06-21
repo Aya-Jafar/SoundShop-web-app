@@ -18,15 +18,15 @@ export default function NavBar() {
 
 
                 <li className="navbar-nav">
-                <Link className="nav-link" to='/our-products/'>OUR PRODUCTS</Link>
+                    <Link className="nav-link" to='/'>OUR PRODUCTS</Link>
                 </li>
 
 
                 <li className="navbar-nav">
-                <Link className="nav-link" to="/my-card/">MY CARD</Link>
+                    <Link className="nav-link" to="/my-card/">MY CARD</Link>
                 </li>
                 <li className="navbar-nav active">
-                <Link className="nav-link" to="/login/">LOGIN</Link>
+                    <Link className="nav-link" to="/login/">LOGIN</Link>
                 </li>
             </ul>
             </div>

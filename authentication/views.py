@@ -52,7 +52,6 @@ class SignupView(APIView):
 # }
 
 
-
 class SigninView(APIView):
     permission_classes = [AllowAny]
 

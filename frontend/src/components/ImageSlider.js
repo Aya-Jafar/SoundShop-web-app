@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import pic from "./copy2.png";
 import pic2 from "./Copy3.png";
 import pic3 from "./copy1.png";
 import pic4 from "./copy4.png";
@@ -9,7 +8,7 @@ import pic5 from "./copy5.png";
 export default function ImageSlider(props) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  let slides = [pic3, pic, pic2, pic4, pic5];
+  let slides = [pic3, pic2, pic4, pic5];
 
 
   const sliderStyle = {

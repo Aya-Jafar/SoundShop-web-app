@@ -5,23 +5,34 @@ import baseUrl from "../urls";
 
 
 export default function Card() {
-  const [responseData, setResponseData] = useState(null);
+    const [responseData, setResponseData] = useState(null);
 
     useEffect(() => {
         fetchData();
     }, []);
 
     const fetchData = () => {
-        fetch(`${baseUrl}/store/order/`)
-        .then((response) => response.json())
-        .then((result) => {
-            setResponseData(result);
+        fetch(`${baseUrl}/store/order/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwayI6IjQiLCJjcmVhdGVkIjoiMjAyMy0wNi0yMVQxMTozMzowNy45MDI1MzgifQ.R_LkMCaVMhpn5DflYcVlnWQ-BH6lH-HwvVwiXNVrzd4` ,// Replace <token> with the actual JWT token
+                'Content-Type': 'application/json',
+            },
         })
-        .catch((error) => console.log(error));
+        .then(response => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            setResponseData(data);
+        })
+        .catch(error => {
+            console.log('Error:', error);
+        });
     };
     console.log(responseData);
 
-  return (
+    return (
         <div className="row">
         <div className="col-lg-12">
             <div className="box-element">
@@ -41,6 +52,10 @@ export default function Card() {
                 </th>
                 <th>
                     <h5>
+                        {/* {
+                            !responseData 
+                        }?{"$0"} : {responseData.total_price}  */}
+
                         Total:{" "}
                         <strong>${responseData && responseData.total_price} </strong>
                     </h5>
