@@ -6,8 +6,10 @@ from django.urls import re_path
 
 urlpatterns = [
     path('', views.all_prods ),
-    # path('add-to-card/',views.add_to_cart),
-    # path('google-login/', views.GoogleConnect.as_view())
+    path('order/', views.get_order),
+    path('order-items/', views.get_items),
+    path('add-to-card/',views.add_to_card)
+    
 ]    
 
 

@@ -13,7 +13,16 @@ class ProdSerializers(ModelSerializer):
 class CardSerializers(ModelSerializer):
     class Meta:
         model = Order
-        fields='__all__'
+        fields=['date_ordered','total_qnt' , 'total_price','count_order_items','completed']
+
+
+
+
+class ItemSerializers(ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ['qnt','date_added','product','total']
+        
 
 
 

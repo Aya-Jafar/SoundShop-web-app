@@ -10,10 +10,7 @@ export default function ImageSlider(props) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   let slides = [pic3, pic, pic2, pic4, pic5];
-  // for (let index = 0; index < props.slides.length; index++) {
-  //     slides.push("http://127.0.0.1:20000" + props.slides[index].image);
-  // }
-  // console.log(slides)
+
 
   const sliderStyle = {
     height: "100%",
@@ -26,8 +23,6 @@ export default function ImageSlider(props) {
     height: "440px",
     backgroundImage: `url(${slides[currentIndex]})`,
     backgroundPosition: "center",
-    // backgroundSize: "cover",
-    // objectFit: "cover",
     transition: "background-image 0.5s ease-in-out",
   };
 
@@ -78,8 +73,8 @@ export default function ImageSlider(props) {
     backgroundColor: "rgba(0, 0, 0, 0)",
     backdropFilter: "blur(15px)",
     fontSize: "45px",
-    lineHeight: "80px",
-    letterSpacing: "8px",
+    lineHeight: "100px",
+    letterSpacing: "20px",
     fontWeight: "400",
     textAlign: "center",
   };

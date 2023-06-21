@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -48,7 +49,7 @@ const LoginPage = () => {
             </div>
         </div>
     </div>
-  );
+    );
 };
 
 export default LoginPage;

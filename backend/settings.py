@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -42,16 +43,16 @@ INSTALLED_APPS = [
     'store',
     'rest_framework',
     "corsheaders",
+
     'authentication',
 
-
-    
+    'rest_framework_simplejwt',
     # 'rest_auth',
 
-    'allauth',
+
+    # 'allauth',
 
 ]
-
 
 
 ACTIVATE_JWT = True
@@ -62,37 +63,37 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.common.CommonMiddleware',
 
-    'django.middleware.csrf.CsrfViewMiddleware',
+
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 
+
+
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3002',  # replace with the domain of your React app
+    # 'http://localhost:3002/my-card/'
+
 ]
+
+AUTH_USER_MODEL = 'authentication.EmailAccount'
 
 
 AUTHENTICATION_BACKENDS = [
+
+    # 'backend.backends.EmailBackend',
+
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-# AUTHENTICATION_BACKENDS = [
-#     # 'social_core.backends.google.GoogleAppOAuth2',
-#     'social_core.backends.google.GoogleOAuth2',
-# #     'social_core.backends.google.GoogleOAuth2',
-
-# #    'drf_social_oauth2.backends.DjangoOAuth2',
-#   'django.contrib.auth.backends.ModelBackend',
-# ]
 
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '596308275-0a42mf97f855dqdnq8b6bp92rd76a63f.apps.googleusercontent.com'
@@ -120,7 +121,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
             ],
         },
     },
@@ -135,16 +135,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
+        'OPTIONS': {
+            "init_command": "SET foreign_key_checks = 0;",
+        },
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django-project-db',
         'USER': 'Aya',
         'PASSWORD': 'sarosha123',
         'HOST': '127.0.0.1',
-
         'PORT': '3306',
     }
 }
-
 
 
 # Password validation
@@ -221,24 +222,15 @@ SOCIALACCOUNT_PROVIDERS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+
+        'authentication.authorization.JWTAuthentication',
+
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+
+
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
 }
-
-
-
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         # 'oauth2_provider.ext.rest_framework.OAuth2Authentication',  # django-oauth-toolkit < 1.0.0
-#         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
-#         'drf_social_oauth2.authentication.SocialAuthentication',
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }

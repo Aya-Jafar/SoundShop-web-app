@@ -1,6 +1,6 @@
-from django.apps import AppConfig
+from django.contrib import admin
+from .models import *
+# Register your models here.
 
-
-class StoreConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'authentication'
+# Register your models here.
+admin.site.register(EmailAccount)
