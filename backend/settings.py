@@ -78,11 +78,13 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3002',  # replace with the domain of your React app
     # '*'
-    # 'http://localhost:3002/my-card/'
+    # 'http://localhost:3002/my-card'
 
 ]
 
-
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3002',
+]
 
 AUTH_USER_MODEL = 'authentication.EmailAccount'
 

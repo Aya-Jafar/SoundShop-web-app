@@ -42,6 +42,7 @@ class JWTAuthentication(BaseAuthentication):
         raise AuthenticationFailed('Invalid token payload')
 
 
+
 def create_token_for_user(user):
     token = jwt.encode(
         {'pk': str(user.pk), 'created': datetime.datetime.now().isoformat()},

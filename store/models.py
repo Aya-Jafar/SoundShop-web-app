@@ -28,7 +28,7 @@ class Product(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True)
+        User, on_delete=models.CASCADE, null=True, blank=True)
     
     date_ordered = models.DateTimeField(auto_now_add=True)
     # if false,order is an open card and we can add more to it
@@ -36,7 +36,7 @@ class Order(models.Model):
     translation_id = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self) -> str:
-        return f'{self.id} - {self.customer.user_name}'
+        return f'{self.id} - {self.customer}'
 
 
     @property
@@ -56,9 +56,9 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     product = models.ForeignKey(
-        Product, on_delete=models.SET_NULL, null=True, blank=True)
+        Product, on_delete=models.CASCADE, null=True, blank=True)
     order = models.ForeignKey(
-        Order, on_delete=models.SET_NULL, null=True, blank=True, related_name='items')
+        Order, on_delete=models.CASCADE, null=True, blank=True, related_name='items')
     qnt = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 

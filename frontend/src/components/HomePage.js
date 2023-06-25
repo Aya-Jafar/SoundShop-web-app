@@ -22,6 +22,7 @@ export default function HomePage() {
   useEffect(() => {
     fetch("http://127.0.0.1:20000/store")
       .then((response) => {
+        console.log(localStorage.getItem('token'));
         return response.json();
       })
       .then((result) => {

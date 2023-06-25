@@ -4,6 +4,8 @@ import HomePage from './components/HomePage';
 import Card from './components/Card';
 import Auth from './components/Auth';
 import NavBar from './components/Navbar';
+import RegisterPage from './components/RegisterPage';
+
 
 function App() {
   return (
@@ -16,7 +18,11 @@ function App() {
           <Route path="/login/" element={<Auth />} />
           <Route path="/my-card/" element={<Card />} />
 
-          <Route path="*" element={<Navigate to="/" />} />
+          {/* <Route path="*" element={<Navigate to="/" />} /> */}
+
+          <Route path="/register" element={<RegisterPage />} />
+
+
         </Routes>
       </header>
     </div>

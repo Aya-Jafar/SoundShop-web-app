@@ -32,7 +32,7 @@ class SignupView(APIView):
 
                 token = create_token_for_user(new_user)
 
-                return Response({'token': token, 'account': json.dumps(new_user)}, status=status.HTTP_201_CREATED)
+                return Response({'token': token, 'account': new_user}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -72,8 +72,8 @@ class SigninView(APIView):
                     }
 
                     return Response({'token': token, 'account': account_data}, status=status.HTTP_200_OK)
-
-                return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
             except User.DoesNotExist:
                 return Response({'message': 'User is not registered'}, status=status.HTTP_400_BAD_REQUEST)

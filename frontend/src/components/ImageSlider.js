@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import pic2 from "./Copy3.png";
-import pic3 from "./copy1.png";
-import pic4 from "./copy4.png";
-import pic5 from "./copy5.png";
+import pic2 from "./cover-images/Copy3.png";
+import pic3 from "./cover-images/copy1.png";
+import pic4 from "./cover-images/copy4.png";
+import pic5 from "./cover-images/copy5.png";
 
 export default function ImageSlider(props) {
   const [currentIndex, setCurrentIndex] = useState(0);

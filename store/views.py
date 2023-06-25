@@ -15,9 +15,9 @@ from rest_framework import generics, permissions
 from authentication.authorization import JWTAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from jwt import decode
+from jwt import decode, InvalidSignatureError
 from .services import get_current_user , check_expire_date
-
+from backend import settings
 
 User = get_user_model()
 
@@ -32,25 +32,35 @@ def all_prods(request):
     except:
         return status.HTTP_404_NOT_FOUND
 
-
 @api_view(['GET'])
 @authentication_classes([JSONWebTokenAuthentication])
 def get_order(request):
+
     try:
-        # TODO: Check expire date 
-
         # Get the token from the request headers
-        current_customer = get_current_user(request)
+        token = request.META.get('HTTP_AUTHORIZATION', '').split(' ')[1]
+        
+        # print(request.META.get('HTTP_AUTHORIZATION'))
+        # print(JWTAuthentication().authenticate(request))
 
-        # Get the current customer's order
-        order, created = Order.objects.get_or_create(
-            customer=current_customer, completed=False)
+        try:
+            current_customer = get_current_user(request)
 
-        serializer = CardSerializers(order)
+            print(current_customer)
+            # Get the current customer's order
+            try:
+                order = Order.objects.get(customer=current_customer, completed=False)
+            except Order.DoesNotExist:
+                order = Order.objects.create(customer=current_customer, completed=False)
+            
+            serializer = CardSerializers(order)
 
-        return Response(serializer.data)
+            return Response(serializer.data)
+        
+        except InvalidSignatureError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
     
-    except Exception as e:
+    except:
         return Response({'error': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -59,19 +69,22 @@ def get_order(request):
 @authentication_classes([JSONWebTokenAuthentication])
 def get_items(request):
     try:
-        # get current  customer
-        customer = get_current_user(request)
+
+        current_customer = get_current_user(request)
         # get current customer order
         order, created = Order.objects.get_or_create(
-            customer=customer, completed=False)
+            customer=current_customer, completed=False)
 
         items = order.items.all()
 
         serializer = ItemSerializers(items, many=True)
+
         return Response(serializer.data)
     
     except:
         return Response({'error': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
 
 
 @api_view(['POST'])

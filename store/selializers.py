@@ -17,11 +17,14 @@ class CardSerializers(ModelSerializer):
 
 
 
+class ItemSerializers(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name')
+    product_image = serializers.ImageField(source='product.image')
 
-class ItemSerializers(ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['qnt','date_added','product','total']
+        fields = ['id', 'qnt', 'date_added', 'total', 'product_name', 'product_image']
+
         
 
 
