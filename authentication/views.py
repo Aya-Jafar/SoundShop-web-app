@@ -3,9 +3,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from .authorization import create_token_for_user
-from .serializer import AccountInSerializer , SigninInSerializer
+
+from authentication.authorization import create_token_for_user
+from authentication.serializer import AccountInSerializer , SigninInSerializer
 import json
+
 
 User = get_user_model()
 
@@ -62,7 +64,6 @@ class SigninView(APIView):
                 user = User.objects.get(email=serializer.validated_data['email'])
                 if user.check_password(serializer.validated_data['password']):
                     token = create_token_for_user(user)
-
                     # Convert the User object to a JSON serializable format
                     account_data = {
                         'id': user.id,
@@ -70,11 +71,10 @@ class SigninView(APIView):
                         'user_name': user.user_name,
                         'phone_number': user.phone_number
                     }
-
                     return Response({'token': token, 'account': account_data}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-
+                
             except User.DoesNotExist:
                 return Response({'message': 'User is not registered'}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -30,6 +30,9 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'store',
+
     'rest_framework',
     "corsheaders",
 
@@ -49,11 +53,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_jwt',
     # 'rest_auth',
-
-
     # 'allauth',
-
 ]
+
 
 
 ACTIVATE_JWT = True
@@ -105,10 +107,10 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '596308275-0a42mf97f855dqdnq8b6bp92rd76a63f.apps
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
-]
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+#     'https://www.googleapis.com/auth/userinfo.email',
+#     'https://www.googleapis.com/auth/userinfo.profile',
+# ]
 
 
 ROOT_URLCONF = 'backend.urls'
@@ -212,18 +214,18 @@ SITE_ID = 2
 LOGIN_REDIRECT_URL = '/'
 
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
-        'APP': {
-            'client_id': '596308275-0a42mf97f855dqdnq8b6bp92rd76a63f.apps.googleusercontent.com',
-            'secret': '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',
-            'key': ''
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         # For each OAuth based provider, either add a ``SocialApp``
+#         # (``socialaccount`` app) containing the required client
+#         # credentials, or list them here:
+#         'APP': {
+#             'client_id': '596308275-0a42mf97f855dqdnq8b6bp92rd76a63f.apps.googleusercontent.com',
+#             'secret': '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',
+#             'key': ''
+#         }
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

@@ -3,6 +3,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class EmailAccountManager(BaseUserManager):
     def create_user(self, user_name, email, phone_number, password, **other_fields):
         if not email:

@@ -1,9 +1,8 @@
-from django.shortcuts import render
-from .models import *
-from .models import Product
+from store.models import *
+
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
-from .selializers import *
+from store.selializers import *
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 
@@ -12,12 +11,13 @@ from rest_framework.authentication import TokenAuthentication
 from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions
 
-from authentication.authorization import JWTAuthentication
-from rest_framework_simplejwt.authentication import JWTAuthentication
+# from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+
 from jwt import decode, InvalidSignatureError
-from .services import get_current_user , check_expire_date
-from backend import settings
+from store.services import get_current_user , check_expire_date
+
 
 User = get_user_model()
 
@@ -32,21 +32,16 @@ def all_prods(request):
     except:
         return status.HTTP_404_NOT_FOUND
 
+
 @api_view(['GET'])
 @authentication_classes([JSONWebTokenAuthentication])
 def get_order(request):
 
     try:
-        # Get the token from the request headers
-        token = request.META.get('HTTP_AUTHORIZATION', '').split(' ')[1]
-        
-        # print(request.META.get('HTTP_AUTHORIZATION'))
-        # print(JWTAuthentication().authenticate(request))
-
         try:
             current_customer = get_current_user(request)
 
-            print(current_customer)
+            # print(current_customer)
             # Get the current customer's order
             try:
                 order = Order.objects.get(customer=current_customer, completed=False)
