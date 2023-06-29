@@ -1,18 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import baseUrl from "../urls";
 
-function addToCard(prod_id, qnt) {
-    const data = {
-        product_id: prod_id,
-        qnt: qnt,
-    };
-    console.log(data);
 
-    // fetch("http://127.0.0.1:20000/store/add-to-card/", {
+function addToCard(prod_id) {
+    console.log(prod_id);
+
+    // fetch(`${baseUrl}/store/add-to-card/`, {
     //     method: "POST",
     //     headers: {
-    //     "Content-Type": "application/json",
+    //         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    //         "Content-Type": "application/json",
     //     },
-    //     body: JSON.stringify(data),
+    //     body: JSON.stringify({
+    //         id: prod_id
+    //     }),
     // })
     //     .then((response) => response.json())
     //     .then((data) => console.log(data))
@@ -20,12 +21,14 @@ function addToCard(prod_id, qnt) {
 }
 
 export default function ProductContainer(props) {
+    // console.log(props);
+
     return (
         <div className="col-lg-4" style={{ textAlign: "left" }}>
         <div className="container" id="prod-section">
             <img
-            className="thumbnail"
-            src={"http://127.0.0.1:20000" + props.image}
+                className="thumbnail"
+                src={`${baseUrl}/${props.image}`}
             ></img>
             <div className="box-element">
             <h6 style={{ margin: 0, display: "inline-block" }}>
@@ -34,9 +37,9 @@ export default function ProductContainer(props) {
             <hr />
             <button
                 className="btn btn-outline-secondary add-btn update-cart"
-                onClick={addToCard(props.key, 1)}
+                onClick={() => addToCard(props.id)} // Use callback function instead of calling the function directly
             >
-                Add to Cart
+                Add to Card
             </button>
             {/* <a className="btn btn-outline-success" href="#">View</a> */}
             <h4 style={{ display: "inline-block", float: "right" }}>
