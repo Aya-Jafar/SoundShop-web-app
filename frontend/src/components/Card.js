@@ -51,6 +51,7 @@ export default function Card() {
             return response.json();
         })
         .then((data) => {
+            
             setItemsData(data);
         })
         .catch(error => {

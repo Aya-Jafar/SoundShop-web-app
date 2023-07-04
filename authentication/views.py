@@ -20,6 +20,7 @@ class SignupView(APIView):
         if serializer.is_valid():
             if serializer.validated_data['password1'] != serializer.validated_data['password2']:
                 return Response({'detail': 'Passwords should match'}, status=status.HTTP_400_BAD_REQUEST)
+            
 
             try:
                 User.objects.get(email=serializer.validated_data['email'])

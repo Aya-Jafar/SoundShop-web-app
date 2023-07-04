@@ -51,7 +51,5 @@ class ModelTestCase(TestCase):
         self.assertEqual(self.order_item.order, self.order)
         self.assertTrue(self.order_item.qnt == 2)
 
-    
-    
 
 

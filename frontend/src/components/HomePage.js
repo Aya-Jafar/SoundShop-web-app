@@ -1,7 +1,7 @@
 import ImageSlider from "./ImageSlider";
 import { useState, useEffect } from "react";
 import ProductContainer from "./ProductContainer";
-
+import baseUrl from "../urls";
 
 const textStyle = {
   fontSize: "20px",
@@ -20,12 +20,12 @@ export default function HomePage() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:20000/store")
+    fetch(`${baseUrl}/store`)
       .then((response) => {
-        console.log(localStorage.getItem('token'));
         return response.json();
       })
       .then((result) => {
+        // console.log(result[0].id);
         setData(result);
       })
       .catch((e) => console.log(e));
@@ -62,6 +62,7 @@ export default function HomePage() {
       <div className="row" style={{ marginTop: "20px" }}>
         {data.map((product) => (
           <ProductContainer
+            id={product.id}
             key={product.id}
             name={product.name}
             price={product.price}
@@ -69,11 +70,6 @@ export default function HomePage() {
           />
         ))}
       </div>
-
-      {/* <section id="about">
-                <h2>About</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.</p>
-            </section> */}
     </div>
   );
 }

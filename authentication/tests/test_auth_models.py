@@ -14,7 +14,10 @@
 
 from django.test import TestCase
 from authentication.models import EmailAccount
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
 
 
 class EmailAccountModelTest(TestCase):
@@ -32,6 +35,23 @@ class EmailAccountModelTest(TestCase):
         self.assertFalse(user.is_superuser)
         self.assertFalse(user.is_active)
 
+        
+        
+    def test_invalid_user(self):
+        user_name = 'testuser'
+        phone_number = '1234567890'
+        password = 'testpassword'
+
+
+        with self.assertRaisesMessage(ValueError, 'user must have an email to register'):
+            User.objects.create_user(
+                user_name= user_name,
+                email='',
+                password=password,
+                phone_number= phone_number
+            )
+
+
 
     def test_create_superuser(self):
         superuser = EmailAccount.objects.create_superuser(
@@ -44,4 +64,21 @@ class EmailAccountModelTest(TestCase):
         self.assertTrue(superuser.is_staff)
         self.assertTrue(superuser.is_superuser)
         self.assertTrue(superuser.is_active)
+
+
+
+
+    def test_invalid_superuser(self):
+        user_name = 'testuser3'
+        password = 'testpassword'
+
+        with self.assertRaisesMessage(ValueError, 'superuser must have an email to register'):
+            User.objects.create_superuser(
+                user_name=user_name,
+                email='',
+                password=password
+            )
+
+
+
 
