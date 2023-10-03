@@ -1,7 +1,7 @@
 import ImageSlider from "./ImageSlider";
 import { useState, useEffect } from "react";
 import ProductContainer from "./ProductContainer";
-import baseUrl from "../urls";
+import BASEURL from "../urls";
 
 const textStyle = {
   fontSize: "20px",
@@ -12,24 +12,23 @@ const textStyle = {
   backgroundColor: "#fff",
   boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.332)",
   borderRadius: "7px",
-  padding:"40px"
+  padding: "40px",
 };
-
 
 export default function HomePage() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`${baseUrl}/store`)
+    fetch(`${BASEURL}/store`)
       .then((response) => {
         return response.json();
       })
       .then((result) => {
-        // console.log(result[0].id);
-        setData(result);
+        setData(result); 
       })
       .catch((e) => console.log(e));
-  }, []);
+  }, []); // The empty array refers that this Hook will be called only once
+  // if we pass some value, it will run whenever that value changes it's state
 
   return (
     <div>

@@ -49,3 +49,9 @@ def create_token_for_user(user):
         settings.SECRET_KEY, algorithm='HS256'
     )
     return {'access': str(token)}
+
+
+class A:
+    def __init__(self):
+        self.__annotations__ = {}
+        

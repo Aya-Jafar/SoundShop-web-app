@@ -19,7 +19,7 @@ class Product(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        User, on_delete=models.CASCADE, null=True, blank=True, related_name='orders')
     
     date_ordered = models.DateTimeField(auto_now_add=True)
     # if false,order is an open card and we can add more to it

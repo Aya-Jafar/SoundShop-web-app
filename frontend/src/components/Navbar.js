@@ -6,7 +6,7 @@ import { Link, Routes, Route, Navigate } from "react-router-dom"
 
 export default function NavBar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-black" style={{ backgroundColor: "black" }}>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-black sticky-top" style={{ backgroundColor: "black" }}>
             <Link className="navbar-brand" to='/' style={{fontSize:"30px"}}>Sound<em>Shop</em></Link>
 
 

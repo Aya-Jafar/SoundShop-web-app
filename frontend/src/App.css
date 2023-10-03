@@ -136,6 +136,8 @@ h6 {
   box-shadow: -1px -3px 5px -2px rgba(214, 214, 214, 1);
 }
 
+
+
 .product {
   border-radius: 0 0 4px 4px;
 }
@@ -221,3 +223,36 @@ em {
 /* .navbar{
 	background-color: #080808;
 } */
+
+.image-container {
+  width: 100px; /* Set the desired width */
+  height: 100px; /* Set the desired height */
+  transform: scale(0.9);
+  transition: 5s;
+}
+.row-image{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+@media (max-width: 768px) {
+  /* Adjust font size, line height, and other properties for smaller screens */
+  h2 {
+    font-size: 30px;
+    line-height: 50px;
+    /* Add other relevant styles */
+  }
+
+}
+
+@media (max-width: 430px) {
+  /* Adjust font size, line height, and other properties for smaller screens */
+  h2 {
+    font-size: 10px;
+    /* line-height: 50px; */
+    /* Add other relevant styles */
+  }
+
+}

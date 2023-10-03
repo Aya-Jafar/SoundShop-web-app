@@ -11,6 +11,19 @@ export default function ImageSlider(props) {
   let slides = [pic3, pic2, pic4, pic5];
 
 
+
+  const goToPrevious = () => {
+    const isFirstSlide = currentIndex === 0;
+    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+  };
+
+  const goToNext = () => {
+    const isLastSlide = currentIndex === slides.length - 1;
+    const newIndex = isLastSlide ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+  };
+
   const sliderStyle = {
     height: "100%",
     position: "relative",
@@ -47,21 +60,6 @@ export default function ImageSlider(props) {
     cursor: "pointer",
   };
 
-  const goToPrevious = () => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
-
-  const goToNext = () => {
-    const isLastSlide = currentIndex === slides.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  };
-
-  const goToSlide = (slideIndex) => {
-    setCurrentIndex(slideIndex);
-  };
 
   const textStyle = {
     position: "absolute",
@@ -76,11 +74,19 @@ export default function ImageSlider(props) {
     letterSpacing: "20px",
     fontWeight: "400",
     textAlign: "center",
+    wordWrap: 'break-word',
+    // display:'flex',
+    // flexWrap: 'wrap'
   };
+
 
   return (
     <div style={{ position: "relative" }}>
-      <h2 style={textStyle}>{"Show your glory".toUpperCase()}</h2>
+      <div>
+        <h2 style={textStyle}>{"Show your glory".toUpperCase()}</h2>
+        {/* <p style={mottoStyle}>Embrace Your Musical Journey</p> */}
+      </div>
+
       <div>
         <div onClick={goToPrevious} style={leftArrowStyles}>
           ❰

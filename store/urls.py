@@ -7,7 +7,10 @@ urlpatterns = [
     path('', views.all_prods , name='all-prods'),
     path('order/', views.get_order),
     path('order-items/', views.get_items),
-    path('add-to-card/',views.add_to_card)
+    path('add-to-card/',views.add_to_card),
+    path('checkout/', views.checkout),
+    
+    path('zaincash-finish/', views.zaincash_finish)
     
 ]    
 

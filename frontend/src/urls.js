@@ -1,6 +1,3 @@
+const BASEURL = "http://127.0.0.1:20001";
 
-
-const baseUrl = 'http://127.0.0.1:20000'
-
-export default baseUrl;
-
+export default BASEURL;

@@ -12,16 +12,21 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions
 
 # from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.http import HttpRequest
 
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-
+from django.views.decorators.csrf import csrf_exempt
+import os
 from jwt import InvalidSignatureError
 from store.services import get_current_user , check_expire_date
 import jwt
 import requests
 from django.shortcuts import redirect
 from datetime import datetime , timedelta
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 
 User = get_user_model()
@@ -176,79 +181,172 @@ def create_update_order(request , user):
 @api_view(['POST'])
 # @authentication_classes([JSONWebTokenAuthentication])
 def checkout(request):
-
-    # get current  customer
-    # customer = get_current_user(request) # TODO 
-
     customer = User.objects.get(user_name='john_doe')
 
-
-    order = Order.objects.get(customer=customer)
+    order = Order.objects.get(customer=customer, completed=False)
     order.completed = True
-    order.save()
-    total_amount = order.total_price # TODO: this should be converted to IQD
 
-    '''TODO: Add Zaincash implementation'''
+    total_amount = order.total_price
 
-    # Generate the Zaincash token
+    # Add Zaincash implementation
     payload = {
         'amount': total_amount,
         'serviceType': 'Buy an instrument',
-        'msisdn': 9647835077893,  # Replace with the customer's phone number
-        'orderId': str(order.id),  # Use the order ID as an identifier for the transaction
-        'redirectUrl': "http://127.0.0.1:20000/zaincash-finish/",
-        # 'iat':datetime.now(),
-        # 'exp': datetime.now() + timedelta(hours=4)
+        'msisdn': customer.phone_number,
+        'orderId': str(order.id),
+        'redirectUrl': "http://127.0.0.1:20000/store/zaincash-finish/",
+        'iat': datetime.now(),
+        'exp': datetime.now() + timedelta(hours=24)
     }
+    expiration_time = payload['exp']
 
     zaincash_secret = '$2y$10$hBbAZo2GfSSvyqAyV2SaqOfYewgYpfR1O19gIh4SqyGWdmySZYPuS'
-    token = jwt.encode(payload, zaincash_secret, algorithm='HS256')
-    # print(jwt.decode(token))
 
+    # print(datetime.now() > expiration_time)
+    # print((datetime.now() - payload['iat']) )
 
+    # if the current date exceeds the expiration time
+    # if datetime.now() > expiration_time:
+    #     # Token has expired, generate a new token
+    #     payload['exp'] = expiration_time
+    #     new_token = jwt.encode(payload, key=zaincash_secret, algorithm='HS256')
+    #     token = new_token
+    # else:
+    token = jwt.encode(payload, key=zaincash_secret, algorithm='HS256')
+
+    print(token.decode())
     # Make a request to the Zaincash API to initiate the payment transaction
     data = {
-        'token': token,
-        'merchantId': "5ffacf6612b5777c6d44266f",
-        'lang': "en",
+        "token": token,  
+        "merchantId": "5ffacf6612b5777c6d44266f",
+        "lang": "en",
     }
-    response = requests.post('https://test.zaincash.iq/transaction/init', data=data)
-    body = response.json()  # Response body as JSON { 'id': 'asdae123asd123asd' }
 
+    response = requests.post('https://test.zaincash.iq/transaction/init', data=data )
+    
+    body = response.json()
     print(body)
 
-    return Response({'message': 'test'})
+    if 'id' in body:
+        # Redirect the customer to the Zaincash payment page
+        return Response({
+            'ZC_url': f"https://test.zaincash.iq/transaction/pay?id={body['id']}",
 
-    # if 'id' in body:
-    #     # Redirect the customer to the Zaincash payment page
-    #     return redirect('https://test.zaincash.iq/transaction/pay?id=' + body['id'])
-    # else:
-    #     # Handle the case where the Zaincash token couldn't be generated
-    #     return Response({'message': 'Cannot generate Zaincash token'}, status=400)
-
-
-    
-
-
-
-
-
-@api_view(['POST'])
-def decrease_item_qnt(request):
-    # TODO: Add this to urls.py 
-
-    '''Pass product id '''
-
-    customer = get_current_user(request)
-
-    order = Order.objects.get(customer=customer)
-    item = OrderItem.objects.get(order=order, 
-                                product=Product.objects.get(id=request.data.get('id')))
-    if item.qnt == 1:
-        item.delete()
-        return Response({'detail': 'Item was deleted Successfully!'} , status=status.HTTP_200_OK)
+        }, status=status.HTTP_200_OK)
     else:
-        item.qnt -= 1
-        item.total -= item.product.price
-        item.save()
-        return Response({'detail': 'Item quantity was decreased Successfully!'} , status=status.HTTP_200_OK)
+        # Handle the case where the Zaincash token couldn't be generated
+        return Response({'message': 'Cannot generate Zaincash token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+@api_view(['GET'])
+def zaincash_finish(request):
+
+    zaincash_secret = '$2y$10$hBbAZo2GfSSvyqAyV2SaqOfYewgYpfR1O19gIh4SqyGWdmySZYPuS'
+    token = request.GET.get('token')
+
+
+    try:
+        result = jwt.decode(token, key=zaincash_secret, algorithms=['HS256'])
+        transaction_status = result.get('status')
+
+        if transaction_status == 'success':
+            return Response({'message': 'Transaction completed successfully'}, status=status.HTTP_200_OK)
+        
+        elif transaction_status == 'failed':
+            return Response({'message': 'Failed to complete transaction'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        else:
+            return Response({'message': 'Invalid token'}, status=status.HTTP_404_NOT_FOUND)
+        
+    except jwt.exceptions.DecodeError as e:
+        return Response({'message': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+'''
+    {'source': 'web', 
+    'type': 'MERCHANT_PAYMENT', 
+    'amount': '3700', 
+    'to': '5ffacf6612b5777c6d44266f', 
+    'serviceType': 'Buy an instrument', 
+    'lang': 'en', 
+    'orderId': '2', 
+    'currencyConversion': {}, 
+    'referenceNumber': '3KUTQO', 
+    'redirectUrl': 'http://127.0.0.1:20000/store/zaincash-finish/', 
+    'credit': False, 
+    'status': 'pending', 
+    'reversed': False, 
+    'createdAt': '2023-07-05T00:53:27.635Z', 
+    'updatedAt': '2023-07-05T00:53:27.635Z', 
+    'id': '64a4bf071de52b1a65c349bb'}
+'''
+
+
+
+# @api_view(['POST' , 'GET'])
+# @csrf_exempt
+# def zaincash_get(request):
+#     # Retrieve the required data from the request
+#     id = request.POST.get('id')
+#     msisdn = request.POST.get('msisdn')
+#     merchant_id = request.POST.get('merchantId')
+
+#     # Set the API endpoint URL based on the environment
+#     r_url = 'https://api.zaincash.iq/transaction/get'
+#     secret = '$2y$10$hBbAZo2GfSSvyqAyV2SaqOfYewgYpfR1O19gIh4SqyGWdmySZYPuS'
+
+#     # Build the data payload for JWT encoding
+#     data = {
+#         'id': id,
+#         'msisdn': msisdn,
+#         'iat': datetime.now(),
+#         'exp': datetime.now() + timedelta(hours=24)
+#     }
+
+#     # Encode the JWT token
+#     new_token = jwt.encode(data, key=secret, algorithm='HS256')
+
+#     # Prepare the data to be sent as POST request to ZainCash API
+#     data_to_post = {
+#         'token': new_token,
+#         'merchantId': merchant_id,
+#         'lang':'en'
+#     }
+
+
+#     # Send the POST request to ZainCash API
+#     response = requests.post(r_url, data=data_to_post)
+
+#     print(response.json())
+
+#     return Response({'message': response.text})
+
+
+
+
+
+# @api_view(['POST'])
+# def decrease_item_qnt(request):
+#     # TODO: Add this to urls.py 
+
+#     '''Pass product id '''
+
+#     customer = get_current_user(request)
+
+#     order = Order.objects.get(customer=customer)
+#     item = OrderItem.objects.get(order=order, 
+#                                 product=Product.objects.get(id=request.data.get('id')))
+#     if item.qnt == 1:
+#         item.delete()
+#         return Response({'detail': 'Item was deleted Successfully!'} , status=status.HTTP_200_OK)
+#     else:
+#         item.qnt -= 1
+#         item.total -= item.product.price
+#         item.save()
+#         return Response({'detail': 'Item quantity was decreased Successfully!'} , status=status.HTTP_200_OK)
